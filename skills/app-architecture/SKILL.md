@@ -107,5 +107,5 @@ project, never commit it.
 - **Scaffolding without the skeleton.** Layer prefixes, `Makefile`, `scripts/test-all.sh`,
   `Packages/ArchitectureTests` and `AGENTS.md` carry the pattern to the next module and author.
 
-Credit: the [JET modular architecture](https://albertodebortoli.com/2026/07/15/revisiting-the-jet-ios-modular-architecture-in-2026/),
-plus a Business layer, with no demo apps and no Tuist.
+Credit: strongly inspired by the [JET modular architecture](https://albertodebortoli.com/2026/07/15/revisiting-the-jet-ios-modular-architecture-in-2026/)
+— not a copy: it adds a Business layer, with no demo apps and no Tuist.

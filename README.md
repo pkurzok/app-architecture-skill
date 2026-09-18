@@ -82,9 +82,13 @@ makes the pattern outlive its author, and the **derived-UI-library rule**. Read
 
 ## Credit
 
-The pattern is the [JET iOS modular architecture](https://albertodebortoli.com/2026/07/15/revisiting-the-jet-ios-modular-architecture-in-2026/)
-by Alberto De Bortoli, with one addition and three omissions: a **Business** layer between
-Feature and Library, and no demo apps, no Tuist, no separate SDK/Utility categories.
+This is **strongly inspired by** the [JET iOS modular architecture](https://albertodebortoli.com/2026/07/15/revisiting-the-jet-ios-modular-architecture-in-2026/)
+by Alberto De Bortoli — it is not that architecture, and nothing here is endorsed by or
+affiliated with JET. Read the original: it is the better explanation of why the layers exist.
+
+Where this one diverges: it adds a **Business** layer between Feature and Library, and it drops
+demo apps, Tuist, and the separate SDK/Utility categories. Those choices are mine, and so is
+anything that turns out to be wrong about them.
 
 ## Licence
 
