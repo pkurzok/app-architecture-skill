@@ -1,0 +1,1 @@
+ARCH: Packages/fm-BookList/Package.swift declares ../fm-Settings — sibling feature dependency

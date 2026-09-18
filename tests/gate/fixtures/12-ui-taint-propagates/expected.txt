@@ -1,0 +1,1 @@
+ARCH: Catalog depends on UI library Widgets (Packages/bm-Catalog/Sources/Catalog/Catalog.swift:1); Widgets imports UI library DesignSystem in Packages/lib-Widgets/Sources/Widgets/Widgets.swift:1

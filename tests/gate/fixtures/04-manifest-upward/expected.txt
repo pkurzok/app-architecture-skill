@@ -1,0 +1,1 @@
+ARCH: Packages/lib-Core/Package.swift declares ../bm-Store — upward dependency

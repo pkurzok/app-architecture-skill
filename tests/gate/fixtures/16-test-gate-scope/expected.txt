@@ -1,0 +1,1 @@
+ARCH: Catalog has no @Test under Tests/CatalogTests

@@ -1,0 +1,51 @@
+name: Shelf
+options:
+  bundleIdPrefix: com.example
+  deploymentTarget: { iOS: "18.0" }
+  createIntermediateGroups: true
+# For a macOS app, three values change: `platform` on the target below, the `deploymentTarget`
+# above, and the destination `make build-app` passes to xcodebuild.
+packages:
+  # Library — domain-agnostic helpers and reusable UI.
+  Core:         { path: Packages/lib-Core }
+  DesignSystem: { path: Packages/lib-DesignSystem }
+  # Business — domain logic, persistence, networking, SDK wrappers. Never UI.
+  Analytics:    { path: Packages/bm-Analytics }
+  Catalog:      { path: Packages/bm-Catalog }
+  # Feature — screens and their view models.
+  BookList:     { path: Packages/fm-BookList }
+  Settings:     { path: Packages/fm-Settings }
+targets:
+  Shelf:
+    type: application
+    platform: iOS
+    sources: [App/Sources]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.Shelf
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        MARKETING_VERSION: "1.0.0"        # -> CFBundleShortVersionString
+        CURRENT_PROJECT_VERSION: "1"      # -> CFBundleVersion
+    dependencies:
+      # The shell is the composition root: it links every feature and whatever it injects.
+      - package: BookList
+      - package: Settings
+      - package: Analytics
+      - package: Catalog
+# A shared scheme for the app target, so a clean `xcodegen generate` always yields a "Shelf"
+# scheme. Without this, xcodebuild only finds the transient auto-created scheme in xcuserdata,
+# which a fresh generate wipes.
+schemes:
+  Shelf:
+    build:
+      targets:
+        Shelf: all
+    run:
+      config: Debug
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release

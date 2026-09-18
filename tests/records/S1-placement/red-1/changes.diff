@@ -1,0 +1,172 @@
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/Packages/bm-Analytics/Package.swift <run>/Packages/bm-Analytics/Package.swift
+--- <fixture>/Packages/bm-Analytics/Package.swift	2026-09-17 18:57:22
++++ <run>/Packages/bm-Analytics/Package.swift	2026-09-17 19:12:44
+@@ -5,8 +5,13 @@
+     name: "bm-Analytics",
+     platforms: [.iOS(.v18), .macOS(.v15)],
+     products: [.library(name: "Analytics", targets: ["Analytics"])],
++    dependencies: [
++        .package(path: "../lib-Core"),
++    ],
+     targets: [
+-        .target(name: "Analytics"),
++        .target(name: "Analytics", dependencies: [
++            .product(name: "Core", package: "lib-Core"),
++        ]),
+         .testTarget(name: "AnalyticsTests", dependencies: ["Analytics"]),
+     ]
+ )
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/Packages/bm-Analytics/Sources/Analytics/Analytics+ScreenViewTracking.swift <run>/Packages/bm-Analytics/Sources/Analytics/Analytics+ScreenViewTracking.swift
+--- <fixture>/Packages/bm-Analytics/Sources/Analytics/Analytics+ScreenViewTracking.swift	1970-01-01 01:00:00
++++ <run>/Packages/bm-Analytics/Sources/Analytics/Analytics+ScreenViewTracking.swift	2026-09-17 19:12:40
+@@ -0,0 +1,10 @@
++import Core
++import Foundation
++
++/// Adopts the screen-tracking contract a UI library can call without depending on Analytics
++/// itself. Screen-view events all share this shape, so every screen's tracking looks the same.
++extension Analytics: ScreenViewTracking {
++    public func trackScreenView(_ name: String) {
++        track(event: "screen_view", parameters: ["screen": name])
++    }
++}
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/Packages/bm-Analytics/Tests/AnalyticsTests/AnalyticsTests.swift <run>/Packages/bm-Analytics/Tests/AnalyticsTests/AnalyticsTests.swift
+--- <fixture>/Packages/bm-Analytics/Tests/AnalyticsTests/AnalyticsTests.swift	2026-09-17 18:57:22
++++ <run>/Packages/bm-Analytics/Tests/AnalyticsTests/AnalyticsTests.swift	2026-09-17 19:13:21
+@@ -21,4 +21,14 @@
+     func trackingWithoutSinksIsHarmless() {
+         Analytics().track(event: "book_list_loaded")
+     }
++
++    @Test("A screen view is reported as a screen_view event named after the screen")
++    func screenViewIsTracked() {
++        let sink = InMemoryAnalyticsSink()
++        let analytics = Analytics(sinks: [sink])
++
++        analytics.trackScreenView("BookList")
++
++        #expect(sink.events == [AnalyticsEvent(name: "screen_view", parameters: ["screen": "BookList"])])
++    }
+ }
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/Packages/fm-BookList/Sources/BookList/BookListView.swift <run>/Packages/fm-BookList/Sources/BookList/BookListView.swift
+--- <fixture>/Packages/fm-BookList/Sources/BookList/BookListView.swift	2026-09-17 18:58:33
++++ <run>/Packages/fm-BookList/Sources/BookList/BookListView.swift	2026-09-17 19:16:04
+@@ -1,3 +1,4 @@
++import Analytics
+ import Catalog
+ import Core
+ import DesignSystem
+@@ -19,6 +20,7 @@
+             .listStyle(.plain)
+             .navigationTitle("Shelf")
+         }
++        .trackScreenView("BookList", using: viewModel.analytics)
+         .task {
+             await viewModel.load()
+         }
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/Packages/fm-BookList/Sources/BookList/BookListViewModel.swift <run>/Packages/fm-BookList/Sources/BookList/BookListViewModel.swift
+--- <fixture>/Packages/fm-BookList/Sources/BookList/BookListViewModel.swift	2026-09-17 18:58:33
++++ <run>/Packages/fm-BookList/Sources/BookList/BookListViewModel.swift	2026-09-17 19:15:37
+@@ -10,9 +10,12 @@
+ public final class BookListViewModel {
+     public private(set) var books: [Book] = []
+ 
++    /// Handed to the view too, so it can report the screen appearing without this view model
++    /// needing to reach across an actor boundary to do it on the view's behalf.
++    let analytics: Analytics
++
+     private let store: CatalogStore
+     private let settings: CatalogSettings
+-    private let analytics: Analytics
+ 
+     public init(store: CatalogStore, settings: CatalogSettings, analytics: Analytics) {
+         self.store = store
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/Packages/fm-Settings/Package.swift <run>/Packages/fm-Settings/Package.swift
+--- <fixture>/Packages/fm-Settings/Package.swift	2026-09-17 18:58:33
++++ <run>/Packages/fm-Settings/Package.swift	2026-09-17 19:12:53
+@@ -6,11 +6,13 @@
+     platforms: [.iOS(.v18)],
+     products: [.library(name: "Settings", targets: ["Settings"])],
+     dependencies: [
++        .package(path: "../bm-Analytics"),
+         .package(path: "../bm-Catalog"),
+         .package(path: "../lib-DesignSystem"),
+     ],
+     targets: [
+         .target(name: "Settings", dependencies: [
++            .product(name: "Analytics", package: "bm-Analytics"),
+             .product(name: "Catalog", package: "bm-Catalog"),
+             .product(name: "DesignSystem", package: "lib-DesignSystem"),
+         ]),
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/Packages/fm-Settings/Sources/Settings/SettingsView.swift <run>/Packages/fm-Settings/Sources/Settings/SettingsView.swift
+--- <fixture>/Packages/fm-Settings/Sources/Settings/SettingsView.swift	2026-09-17 18:58:33
++++ <run>/Packages/fm-Settings/Sources/Settings/SettingsView.swift	2026-09-17 19:13:15
+@@ -1,3 +1,4 @@
++import Analytics
+ import Catalog
+ import DesignSystem
+ import SwiftUI
+@@ -5,9 +6,11 @@
+ /// The reader's preferences.
+ public struct SettingsView: View {
+     private let settings: CatalogSettings
++    private let analytics: Analytics
+ 
+-    public init(settings: CatalogSettings) {
++    public init(settings: CatalogSettings, analytics: Analytics) {
+         self.settings = settings
++        self.analytics = analytics
+     }
+ 
+     public var body: some View {
+@@ -23,5 +26,6 @@
+             .padding(.top, Spacing.small)
+             .navigationTitle("Settings")
+         }
++        .trackScreenView("Settings", using: analytics)
+     }
+ }
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/Packages/lib-Core/Sources/Core/ScreenViewTracking.swift <run>/Packages/lib-Core/Sources/Core/ScreenViewTracking.swift
+--- <fixture>/Packages/lib-Core/Sources/Core/ScreenViewTracking.swift	1970-01-01 01:00:00
++++ <run>/Packages/lib-Core/Sources/Core/ScreenViewTracking.swift	2026-09-17 19:12:30
+@@ -0,0 +1,9 @@
++import Foundation
++
++/// Something that can be told a screen appeared. `Analytics` conforms to this (in bm-Analytics),
++/// but the protocol lives here — in a UI-free library both a feature and a business module can
++/// see — so a UI library can offer a screen-tracking view modifier without depending on Analytics
++/// itself, and a business module can adopt it without depending on SwiftUI.
++public protocol ScreenViewTracking: Sendable {
++    func trackScreenView(_ name: String)
++}
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/Packages/lib-DesignSystem/Package.swift <run>/Packages/lib-DesignSystem/Package.swift
+--- <fixture>/Packages/lib-DesignSystem/Package.swift	2026-09-17 18:57:22
++++ <run>/Packages/lib-DesignSystem/Package.swift	2026-09-17 19:12:48
+@@ -5,7 +5,12 @@
+     name: "lib-DesignSystem",
+     platforms: [.iOS(.v18)],
+     products: [.library(name: "DesignSystem", targets: ["DesignSystem"])],
++    dependencies: [
++        .package(path: "../lib-Core"),
++    ],
+     targets: [
+-        .target(name: "DesignSystem"),
++        .target(name: "DesignSystem", dependencies: [
++            .product(name: "Core", package: "lib-Core"),
++        ]),
+     ]
+ )
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/Packages/lib-DesignSystem/Sources/DesignSystem/TrackScreenView.swift <run>/Packages/lib-DesignSystem/Sources/DesignSystem/TrackScreenView.swift
+--- <fixture>/Packages/lib-DesignSystem/Sources/DesignSystem/TrackScreenView.swift	1970-01-01 01:00:00
++++ <run>/Packages/lib-DesignSystem/Sources/DesignSystem/TrackScreenView.swift	2026-09-17 19:12:35
+@@ -0,0 +1,10 @@
++import Core
++import SwiftUI
++
++public extension View {
++    /// Reports this screen's name the moment it appears, and again each time it comes back. Every
++    /// screen gets this same one line, so wiring up the next one is never more than that.
++    func trackScreenView(_ name: String, using tracker: some ScreenViewTracking) -> some View {
++        onAppear { tracker.trackScreenView(name) }
++    }
++}

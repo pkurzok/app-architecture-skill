@@ -1,0 +1,91 @@
+bash scripts/test-all.sh
+== swift test: Packages/ArchitectureTests ==
+Building for debugging...
+[Planning deferred tasks]
+[25 / 36]
+[26 / 37] ArchitectureTests-product
+[38 / 80]
+[43 / 80]
+[45 / 80]
+[51 / 80]
+[55 / 80]
+[58 / 80]
+[60 / 80]
+[61 / 80]
+[69 / 80] ArchitectureTests-product
+[74 / 80] ArchitectureTests-product
+[76 / 80] ArchitectureTests-product
+Build complete! (4,91 Sek.)
+Test Suite 'All tests' started at 2026-09-17 19:05:09.460.
+Test Suite 'All tests' passed at 2026-09-17 19:05:09.461.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+􀟈  Test run started.
+􀄵  Testing Library Version: 2084
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite "Parsing" started.
+􀟈  Suite "Architecture" started.
+􀟈  Test "Lines that are not imports" started.
+􀟈  Test "Reads the ui-boundary reason" started.
+􀟈  Test "Reads the module name out of an import line" started.
+􀟈  Test "Module names follow the directory convention and are unique" started.
+􀟈  Test "Recognises a @Test attribute line" started.
+􀟈  Test "Manifests declare no dependency the code may not import" started.
+􀟈  Test "Every ui-boundary marker is signed off, and every sign-off has a marker" started.
+􀟈  Test "Business modules are free of UI" started.
+􀟈  Test "Registry found the app shell and at least one module" started.
+􀟈  Test "Business modules and plain libraries ship Swift Testing tests" started.
+􀟈  Test case passing 1 argument line → "// import Catalog" to "Lines that are not imports" started.
+􀟈  Test case passing 1 argument line → "    // import Catalog" to "Lines that are not imports" started.
+􀟈  Test case passing 2 arguments line → "import Foundation", expected → "Foundation" to "Reads the module name out of an import line" started.
+􀟈  Test case passing 2 arguments line → "import UIKit", expected → nil to "Reads the ui-boundary reason" started.
+􀟈  Test case passing 1 argument line → "let importer = Importer()" to "Lines that are not imports" started.
+􀟈  Test case passing 2 arguments line → "import UIKit // thumbnails", expected → nil to "Reads the ui-boundary reason" started.
+􀟈  Test case passing 1 argument line → "#endif" to "Lines that are not imports" started.
+􀟈  Test case passing 1 argument line → "#if canImport(UIKit)" to "Lines that are not imports" started.
+􀟈  Test case passing 2 arguments line → "    import Catalog", expected → "Catalog" to "Reads the module name out of an import line" started.
+􀟈  Test case passing 1 argument line → "func importAll() {}" to "Lines that are not imports" started.
+􀟈  Test "Modules import their own layer or lower, never a sibling feature" started.
+􀟈  Test case passing 2 arguments line → "@Test func loadsBooks()", expected → true to "Recognises a @Test attribute line" started.
+􀟈  Test case passing 2 arguments line → "import UIKit // ui-boundary: renders the cover thumbnail", expected → "renders the cover thumbnail" to "Reads the ui-boundary reason" started.
+􀟈  Test case passing 1 argument line → "" to "Lines that are not imports" started.
+􀟈  Test case passing 2 arguments line → "@testable import Catalog", expected → "Catalog" to "Reads the module name out of an import line" started.
+􀟈  Test case passing 2 arguments line → "import struct Foo.Bar", expected → "Foo" to "Reads the module name out of an import line" started.
+􀟈  Test case passing 2 arguments line → "@Suite("Catalog") struct CatalogTests {", expected → false to "Recognises a @Test attribute line" started.
+􀟈  Test case passing 2 arguments line → "import UIKit // ui-boundary", expected → "" to "Reads the ui-boundary reason" started.
+􀟈  Test case passing 2 arguments line → "    @Test("Sorts by title", arguments: titles)", expected → true to "Recognises a @Test attribute line" started.
+􀟈  Test case passing 2 arguments line → "import UIKit  //  ui-boundary:  spaced out ", expected → "spaced out" to "Reads the ui-boundary reason" started.
+􀟈  Test case passing 2 arguments line → "@testable import Catalog", expected → false to "Recognises a @Test attribute line" started.
+􀟈  Test case passing 2 arguments line → "import UIKit // ui-boundary:", expected → "" to "Reads the ui-boundary reason" started.
+􀟈  Test case passing 2 arguments line → "@Test", expected → true to "Recognises a @Test attribute line" started.
+􀟈  Test case passing 2 arguments line → "// @Test disabled for now", expected → false to "Recognises a @Test attribute line" started.
+􀟈  Test case passing 2 arguments line → "@preconcurrency import Analytics", expected → "Analytics" to "Reads the module name out of an import line" started.
+􀟈  Test case passing 2 arguments line → "@_spi(Internal) import Catalog", expected → "Catalog" to "Reads the module name out of an import line" started.
+􀟈  Test case passing 2 arguments line → "@_implementationOnly import Vendor", expected → "Vendor" to "Reads the module name out of an import line" started.
+􀟈  Test case passing 2 arguments line → "fileprivate import Core", expected → "Core" to "Reads the module name out of an import line" started.
+􀟈  Test case passing 2 arguments line → "@TestableThing var flag", expected → false to "Recognises a @Test attribute line" started.
+􀟈  Test case passing 2 arguments line → "@preconcurrency public import Core", expected → "Core" to "Reads the module name out of an import line" started.
+􀟈  Test case passing 2 arguments line → "import UIKit // ui-boundary: thumbnail rendering", expected → "UIKit" to "Reads the module name out of an import line" started.
+􀟈  Test case passing 2 arguments line → "public import Core", expected → "Core" to "Reads the module name out of an import line" started.
+􀟈  Test case passing 2 arguments line → "  import UIKit", expected → "UIKit" to "Reads the module name out of an import line" started.
+􁁛  Test "Lines that are not imports" with 7 test cases passed after 0.001 seconds.
+􁁛  Test "Reads the ui-boundary reason" with 6 test cases passed after 0.001 seconds.
+􁁛  Test "Recognises a @Test attribute line" with 7 test cases passed after 0.001 seconds.
+􁁛  Test "Reads the module name out of an import line" with 12 test cases passed after 0.001 seconds.
+􁁛  Suite "Parsing" passed after 0.001 seconds.
+􁁛  Test "Registry found the app shell and at least one module" passed after 0.005 seconds.
+􁁛  Test "Module names follow the directory convention and are unique" passed after 0.005 seconds.
+􁁛  Test "Every ui-boundary marker is signed off, and every sign-off has a marker" passed after 0.005 seconds.
+􁁛  Test "Business modules and plain libraries ship Swift Testing tests" passed after 0.005 seconds.
+􁁛  Test "Manifests declare no dependency the code may not import" passed after 0.005 seconds.
+􁁛  Test "Modules import their own layer or lower, never a sibling feature" passed after 0.005 seconds.
+􀢄  Test "Business modules are free of UI" recorded an issue at ArchitectureTests.swift:50:25: Issue recorded
+􀄵  ARCH: Catalog imports UIKit — UI framework in business module (Packages/bm-Catalog/Sources/Catalog/CoverImage.swift:3)
+􀢄  Test "Business modules are free of UI" failed after 0.006 seconds with 1 issue.
+􀢄  Suite "Architecture" failed after 0.006 seconds with 1 issue.
+􀄵  /// Wires the rules to Swift Testing. One test per rule, each reporting *every* violation it found,
+􀄵  /// so a single run tells you the whole story instead of one line of it.
+􀢄  Test run with 11 tests in 2 suites failed after 0.006 seconds with 1 issue.
+Note: Some test targets reported failures:
+  - ArchitectureTests (Swift Testing)
+FAILED: Packages/ArchitectureTests
+make: *** [test] Error 1

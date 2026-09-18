@@ -1,0 +1,91 @@
+bash scripts/test-all.sh
+== swift test: Packages/bm-Analytics ==
+Building for debugging...
+[Planning deferred tasks]
+[28 / 52]
+[29 / 53] Analytics
+[40 / 124]
+[50 / 124]
+[53 / 124]
+[60 / 124]
+[64 / 124]
+[70 / 124]
+[75 / 124]
+[76 / 124]
+[88 / 124]
+[92 / 124]
+[94 / 124]
+[100 / 124] Analytics
+[108 / 124] Analytics
+[114 / 125] AnalyticsTests-product
+[115 / 129]
+[118 / 129] AnalyticsTests-product
+[125 / 129] AnalyticsTests-product
+Build complete! (7,67 Sek.)
+Test Suite 'All tests' started at 2026-09-17 20:48:17.302.
+Test Suite 'All tests' passed at 2026-09-17 20:48:17.304.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+􀟈  Test run started.
+􀄵  Testing Library Version: 2084
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite "Analytics" started.
+􀟈  Test "An event reaches every sink" started.
+􀟈  Test "Tracking without a sink is harmless" started.
+􁁛  Test "Tracking without a sink is harmless" passed after 0.001 seconds.
+􁁛  Test "An event reaches every sink" passed after 0.001 seconds.
+􁁛  Suite "Analytics" passed after 0.001 seconds.
+􁁛  Test run with 2 tests in 1 suite passed after 0.001 seconds.
+== skip (no Tests/): Packages/bm-Catalog ==
+== xcodebuild test (iPhone 18 Pro Max): Packages/fm-BookList ==
+2026-09-17 20:48:23.921 xcodebuild[44840:17492873] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
+2026-09-17 20:48:33.940 xcodebuild[44840:17492873] [MT] IDETestOperationsObserverDebug: 5.541 elapsed -- Testing started completed.
+2026-09-17 20:48:33.940 xcodebuild[44840:17492873] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-09-17 20:48:33.940 xcodebuild[44840:17492873] [MT] IDETestOperationsObserverDebug: 5.541 sec, +5.541 sec -- end
+Testing started
+== skip (no Tests/): Packages/fm-Settings ==
+== xcodebuild test (iPhone 18 Pro Max): Packages/lib-Core ==
+2026-09-17 20:48:38.987 xcodebuild[45240:17496797] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
+2026-09-17 20:48:48.210 xcodebuild[45240:17496797] [MT] IDETestOperationsObserverDebug: 6.449 elapsed -- Testing started completed.
+2026-09-17 20:48:48.210 xcodebuild[45240:17496797] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-09-17 20:48:48.210 xcodebuild[45240:17496797] [MT] IDETestOperationsObserverDebug: 6.449 sec, +6.449 sec -- end
+Testing started
+== skip (no Tests/): Packages/lib-DesignSystem ==
+== xcodebuild test (iPhone 18 Pro Max): Packages/lib-Formatting ==
+2026-09-17 20:48:57.012 xcodebuild[45505:17511052] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
+2026-09-17 20:49:05.495 xcodebuild[45505:17511052] [MT] IDETestOperationsObserverDebug: 6.716 elapsed -- Testing started completed.
+2026-09-17 20:49:05.495 xcodebuild[45505:17511052] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-09-17 20:49:05.495 xcodebuild[45505:17511052] [MT] IDETestOperationsObserverDebug: 6.716 sec, +6.716 sec -- end
+Testing started
+swiftlint lint --strict
+Linting Swift files in current working directory
+Linting 'AnalyticsTests.swift' (2/29)
+Linting 'LegacyApp.swift' (1/29)
+Linting 'Analytics.swift' (3/29)
+Linting 'InMemoryAnalyticsSink.swift' (4/29)
+Linting 'AnalyticsEvent.swift' (5/29)
+Linting 'TrackedScreen.swift' (6/29)
+Linting 'FormattingTests.swift' (7/29)
+Linting 'ShelfCount.swift' (8/29)
+Linting 'CoreTests.swift' (9/29)
+Linting 'CoverTint.swift' (10/29)
+Linting 'BookID.swift' (11/29)
+Linting 'PublicationYear.swift' (12/29)
+Linting 'Packages/bm-Analytics/Package.swift' (14/29)
+Linting 'Packages/lib-Formatting/Package.swift' (13/29)
+Linting 'Packages/lib-Core/Package.swift' (15/29)
+Linting 'Packages/lib-DesignSystem/Package.swift' (16/29)
+Linting 'CardStyle.swift' (18/29)
+Linting 'Spacing.swift' (17/29)
+Linting 'BookListViewModelTests.swift' (19/29)
+Linting 'BookListView.swift' (20/29)
+Linting 'BookListViewModel.swift' (21/29)
+Linting 'Packages/fm-BookList/Package.swift' (22/29)
+Linting 'SettingsView.swift' (23/29)
+Linting 'Packages/fm-Settings/Package.swift' (24/29)
+Linting 'Packages/bm-Catalog/Package.swift' (25/29)
+Linting 'Book.swift' (26/29)
+Linting 'BookSortOrder.swift' (27/29)
+Linting 'CatalogStore.swift' (28/29)
+Linting 'CatalogSettings.swift' (29/29)
+Done linting! Found 0 violations, 0 serious in 29 files.
+make verify exit: 0

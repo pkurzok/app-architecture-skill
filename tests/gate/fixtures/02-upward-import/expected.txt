@@ -1,0 +1,1 @@
+ARCH: Core (Library) imports Store (Business) — upward import (Packages/lib-Core/Sources/Core/Core.swift:1)

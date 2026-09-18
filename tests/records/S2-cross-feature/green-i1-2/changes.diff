@@ -1,0 +1,105 @@
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/App/Sources/ShelfApp.swift <run>/App/Sources/ShelfApp.swift
+--- <fixture>/App/Sources/ShelfApp.swift	2026-09-17 18:58:33
++++ <run>/App/Sources/ShelfApp.swift	2026-09-18 08:51:20
+@@ -1,6 +1,8 @@
+ import Analytics
+ import BookList
+ import Catalog
++import DesignSystem
++import Settings
+ import SwiftUI
+ 
+ /// The composition root. It is the only place that may import every layer, so it is where the
+@@ -23,6 +25,9 @@
+     var body: some Scene {
+         WindowGroup {
+             BookListView(viewModel: bookList)
++                .environment(\.settingsContent, SettingsContent(id: "settings") {
++                    AnyView(SettingsView(settings: settings))
++                })
+         }
+     }
+ }
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/Packages/fm-BookList/Sources/BookList/BookListView.swift <run>/Packages/fm-BookList/Sources/BookList/BookListView.swift
+--- <fixture>/Packages/fm-BookList/Sources/BookList/BookListView.swift	2026-09-17 18:58:33
++++ <run>/Packages/fm-BookList/Sources/BookList/BookListView.swift	2026-09-18 08:51:14
+@@ -5,6 +5,9 @@
+ 
+ /// The shelf.
+ public struct BookListView: View {
++    @Environment(\.settingsContent) private var settingsContent
++    @State private var isShowingSettings = false
++
+     private let viewModel: BookListViewModel
+ 
+     public init(viewModel: BookListViewModel) {
+@@ -18,9 +21,17 @@
+             }
+             .listStyle(.plain)
+             .navigationTitle("Shelf")
++            .toolbar {
++                ToolbarItem(placement: .topBarTrailing) {
++                    Button("Settings", systemImage: "gear") { isShowingSettings = true }
++                }
++            }
+         }
+         .task {
+             await viewModel.load()
++        }
++        .sheet(isPresented: $isShowingSettings) {
++            settingsContent()
+         }
+     }
+ }
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/Packages/lib-DesignSystem/Sources/DesignSystem/FeatureSeams.swift <run>/Packages/lib-DesignSystem/Sources/DesignSystem/FeatureSeams.swift
+--- <fixture>/Packages/lib-DesignSystem/Sources/DesignSystem/FeatureSeams.swift	1970-01-01 01:00:00
++++ <run>/Packages/lib-DesignSystem/Sources/DesignSystem/FeatureSeams.swift	2026-09-18 08:51:08
+@@ -0,0 +1,37 @@
++import SwiftUI
++
++/// Builds the settings screen. Injected by the app shell, called by whoever presents it.
++///
++/// `Equatable` on a stable `id` rather than a bare `() -> AnyView` environment value: SwiftUI
++/// cannot compare function values, so a key holding a raw closure makes every reader invalidate
++/// on *any* environment write. Comparing the id gives the framework an honest answer — two seams
++/// built from the same registration are the same seam.
++public struct SettingsContent: Equatable, Sendable {
++    private let id: String
++    // `@MainActor @Sendable` so the type is `Sendable` and `unavailable` can be a `static let`
++    // under Swift 6. The closure only ever runs while building a view, which is main-actor work.
++    private let make: @MainActor @Sendable () -> AnyView
++
++    public init(id: String, make: @escaping @MainActor @Sendable () -> AnyView) {
++        self.id = id
++        self.make = make
++    }
++
++    @MainActor
++    public func callAsFunction() -> AnyView {
++        make()
++    }
++
++    public static let unavailable = SettingsContent(id: "unavailable") { AnyView(EmptyView()) }
++
++    public static func == (lhs: SettingsContent, rhs: SettingsContent) -> Bool {
++        lhs.id == rhs.id
++    }
++}
++
++public extension EnvironmentValues {
++    // The default is a `static let`, not a fresh expression: `@Entry` re-evaluates its default on
++    // every read that falls back to it, so a default that allocates would invalidate readers on
++    // every unrelated environment write.
++    @Entry var settingsContent: SettingsContent = .unavailable
++}
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/project.yml <run>/project.yml
+--- <fixture>/project.yml	2026-09-17 18:58:45
++++ <run>/project.yml	2026-09-18 08:51:40
+@@ -33,6 +33,7 @@
+       - package: Settings
+       - package: Analytics
+       - package: Catalog
++      - package: DesignSystem
+ # A shared scheme for the app target, so a clean `xcodegen generate` always yields a "Shelf"
+ # scheme. Without this, xcodebuild only finds the transient auto-created scheme in xcuserdata,
+ # which a fresh generate wipes.

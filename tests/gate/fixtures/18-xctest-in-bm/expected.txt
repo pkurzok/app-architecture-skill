@@ -1,0 +1,1 @@
+ARCH: Catalog tests import XCTest — write them with Swift Testing

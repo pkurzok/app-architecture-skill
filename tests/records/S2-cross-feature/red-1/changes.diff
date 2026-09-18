@@ -1,0 +1,72 @@
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/App/Sources/ShelfApp.swift <run>/App/Sources/ShelfApp.swift
+--- <fixture>/App/Sources/ShelfApp.swift	2026-09-17 18:58:33
++++ <run>/App/Sources/ShelfApp.swift	2026-09-17 19:39:29
+@@ -1,6 +1,7 @@
+ import Analytics
+ import BookList
+ import Catalog
++import Settings
+ import SwiftUI
+ 
+ /// The composition root. It is the only place that may import every layer, so it is where the
+@@ -22,7 +23,9 @@
+ 
+     var body: some Scene {
+         WindowGroup {
+-            BookListView(viewModel: bookList)
++            BookListView(viewModel: bookList) {
++                SettingsView(settings: settings)
++            }
+         }
+     }
+ }
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/Packages/fm-BookList/Sources/BookList/BookListView.swift <run>/Packages/fm-BookList/Sources/BookList/BookListView.swift
+--- <fixture>/Packages/fm-BookList/Sources/BookList/BookListView.swift	2026-09-17 18:58:33
++++ <run>/Packages/fm-BookList/Sources/BookList/BookListView.swift	2026-09-17 19:39:22
+@@ -4,11 +4,22 @@
+ import SwiftUI
+ 
+ /// The shelf.
+-public struct BookListView: View {
++///
++/// Settings is a sibling feature, so this view never imports it — the architecture gate forbids a
++/// feature depending on a feature. Instead the composition root hands in how to build the
++/// settings screen, and this view only knows it can be shown.
++public struct BookListView<SettingsDestination: View>: View {
+     private let viewModel: BookListViewModel
++    private let settingsDestination: () -> SettingsDestination
+ 
+-    public init(viewModel: BookListViewModel) {
++    @State private var isShowingSettings = false
++
++    public init(
++        viewModel: BookListViewModel,
++        @ViewBuilder settingsDestination: @escaping () -> SettingsDestination
++    ) {
+         self.viewModel = viewModel
++        self.settingsDestination = settingsDestination
+     }
+ 
+     public var body: some View {
+@@ -18,9 +29,21 @@
+             }
+             .listStyle(.plain)
+             .navigationTitle("Shelf")
++            .toolbar {
++                ToolbarItem(placement: .topBarTrailing) {
++                    Button {
++                        isShowingSettings = true
++                    } label: {
++                        Label("Settings", systemImage: "gearshape")
++                    }
++                }
++            }
+         }
+         .task {
+             await viewModel.load()
++        }
++        .sheet(isPresented: $isShowingSettings) {
++            settingsDestination()
+         }
+     }
+ }

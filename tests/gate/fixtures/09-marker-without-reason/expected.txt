@@ -1,0 +1,2 @@
+ARCH: Packages/bm-Catalog/Sources/Catalog/Thumbnail.swift:1: ui-boundary marker is not listed in ArchitectureConfig.uiBoundaryAllowlist
+ARCH: Packages/bm-Catalog/Sources/Catalog/Thumbnail.swift:1: ui-boundary marker needs a reason

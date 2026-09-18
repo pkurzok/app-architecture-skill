@@ -1,0 +1,169 @@
+bash scripts/test-all.sh
+== swift test: Packages/ArchitectureTests ==
+Building for debugging...
+Build complete! (0,18 Sek.)
+Test Suite 'All tests' started at 2026-09-17 19:28:00.562.
+Test Suite 'All tests' passed at 2026-09-17 19:28:00.563.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+􀟈  Test run started.
+􀄵  Testing Library Version: 2084
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite "Architecture" started.
+􀟈  Suite "Parsing" started.
+􀟈  Test "Module names follow the directory convention and are unique" started.
+􀟈  Test "Business modules and plain libraries ship Swift Testing tests" started.
+􀟈  Test "Every ui-boundary marker is signed off, and every sign-off has a marker" started.
+􀟈  Test "Modules import their own layer or lower, never a sibling feature" started.
+􀟈  Test "Reads the ui-boundary reason" started.
+􀟈  Test "Lines that are not imports" started.
+􀟈  Test "Manifests declare no dependency the code may not import" started.
+􀟈  Test "Business modules are free of UI" started.
+􀟈  Test "Registry found the app shell and at least one module" started.
+􀟈  Test "Recognises a @Test attribute line" started.
+􀟈  Test "Reads the module name out of an import line" started.
+􀟈  Test case passing 1 argument line → "// import Catalog" to "Lines that are not imports" started.
+􀟈  Test case passing 2 arguments line → "import UIKit", expected → nil to "Reads the ui-boundary reason" started.
+􀟈  Test case passing 1 argument line → "#if canImport(UIKit)" to "Lines that are not imports" started.
+􀟈  Test case passing 1 argument line → "    // import Catalog" to "Lines that are not imports" started.
+􀟈  Test case passing 2 arguments line → "import UIKit  //  ui-boundary:  spaced out ", expected → "spaced out" to "Reads the ui-boundary reason" started.
+􀟈  Test case passing 1 argument line → "#endif" to "Lines that are not imports" started.
+􀟈  Test case passing 2 arguments line → "import UIKit // ui-boundary: renders the cover thumbnail", expected → "renders the cover thumbnail" to "Reads the ui-boundary reason" started.
+􀟈  Test case passing 2 arguments line → "import UIKit // ui-boundary:", expected → "" to "Reads the ui-boundary reason" started.
+􀟈  Test case passing 2 arguments line → "import UIKit // thumbnails", expected → nil to "Reads the ui-boundary reason" started.
+􀟈  Test case passing 1 argument line → "let importer = Importer()" to "Lines that are not imports" started.
+􀟈  Test case passing 1 argument line → "func importAll() {}" to "Lines that are not imports" started.
+􀟈  Test case passing 1 argument line → "" to "Lines that are not imports" started.
+􀟈  Test case passing 2 arguments line → "import Foundation", expected → "Foundation" to "Reads the module name out of an import line" started.
+􀟈  Test case passing 2 arguments line → "import struct Foo.Bar", expected → "Foo" to "Reads the module name out of an import line" started.
+􀟈  Test case passing 2 arguments line → "import UIKit // ui-boundary", expected → "" to "Reads the ui-boundary reason" started.
+􀟈  Test case passing 2 arguments line → "    @Test("Sorts by title", arguments: titles)", expected → true to "Recognises a @Test attribute line" started.
+􀟈  Test case passing 2 arguments line → "@Test func loadsBooks()", expected → true to "Recognises a @Test attribute line" started.
+􀟈  Test case passing 2 arguments line → "@Suite("Catalog") struct CatalogTests {", expected → false to "Recognises a @Test attribute line" started.
+􀟈  Test case passing 2 arguments line → "@testable import Catalog", expected → "Catalog" to "Reads the module name out of an import line" started.
+􀟈  Test case passing 2 arguments line → "@testable import Catalog", expected → false to "Recognises a @Test attribute line" started.
+􀟈  Test case passing 2 arguments line → "@Test", expected → true to "Recognises a @Test attribute line" started.
+􀟈  Test case passing 2 arguments line → "    import Catalog", expected → "Catalog" to "Reads the module name out of an import line" started.
+􀟈  Test case passing 2 arguments line → "// @Test disabled for now", expected → false to "Recognises a @Test attribute line" started.
+􀟈  Test case passing 2 arguments line → "@preconcurrency import Analytics", expected → "Analytics" to "Reads the module name out of an import line" started.
+􀟈  Test case passing 2 arguments line → "@_implementationOnly import Vendor", expected → "Vendor" to "Reads the module name out of an import line" started.
+􀟈  Test case passing 2 arguments line → "@TestableThing var flag", expected → false to "Recognises a @Test attribute line" started.
+􀟈  Test case passing 2 arguments line → "@_spi(Internal) import Catalog", expected → "Catalog" to "Reads the module name out of an import line" started.
+􀟈  Test case passing 2 arguments line → "public import Core", expected → "Core" to "Reads the module name out of an import line" started.
+􀟈  Test case passing 2 arguments line → "@preconcurrency public import Core", expected → "Core" to "Reads the module name out of an import line" started.
+􀟈  Test case passing 2 arguments line → "fileprivate import Core", expected → "Core" to "Reads the module name out of an import line" started.
+􀟈  Test case passing 2 arguments line → "import UIKit // ui-boundary: thumbnail rendering", expected → "UIKit" to "Reads the module name out of an import line" started.
+􀟈  Test case passing 2 arguments line → "  import UIKit", expected → "UIKit" to "Reads the module name out of an import line" started.
+􁁛  Test "Lines that are not imports" with 7 test cases passed after 0.001 seconds.
+􁁛  Test "Reads the ui-boundary reason" with 6 test cases passed after 0.001 seconds.
+􁁛  Test "Recognises a @Test attribute line" with 7 test cases passed after 0.001 seconds.
+􁁛  Test "Reads the module name out of an import line" with 12 test cases passed after 0.001 seconds.
+􁁛  Suite "Parsing" passed after 0.001 seconds.
+􁁛  Test "Every ui-boundary marker is signed off, and every sign-off has a marker" passed after 0.005 seconds.
+􁁛  Test "Registry found the app shell and at least one module" passed after 0.004 seconds.
+􁁛  Test "Module names follow the directory convention and are unique" passed after 0.005 seconds.
+􁁛  Test "Manifests declare no dependency the code may not import" passed after 0.005 seconds.
+􁁛  Test "Business modules and plain libraries ship Swift Testing tests" passed after 0.005 seconds.
+􁁛  Test "Business modules are free of UI" passed after 0.005 seconds.
+􁁛  Test "Modules import their own layer or lower, never a sibling feature" passed after 0.005 seconds.
+􁁛  Suite "Architecture" passed after 0.005 seconds.
+􁁛  Test run with 11 tests in 2 suites passed after 0.005 seconds.
+== swift test: Packages/bm-Analytics ==
+Building for debugging...
+Build complete! (0,19 Sek.)
+Test Suite 'All tests' started at 2026-09-17 19:28:01.656.
+Test Suite 'All tests' passed at 2026-09-17 19:28:01.657.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+􀟈  Test run started.
+􀄵  Testing Library Version: 2084
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite "Analytics" started.
+􀟈  Test "An event reaches every sink" started.
+􀟈  Test "Tracking without a sink is harmless" started.
+􀟈  Test "A screen reports its own name as a screen_view event" started.
+􁁛  Test "Tracking without a sink is harmless" passed after 0.001 seconds.
+􁁛  Test "An event reaches every sink" passed after 0.001 seconds.
+􁁛  Test "A screen reports its own name as a screen_view event" passed after 0.001 seconds.
+􁁛  Suite "Analytics" passed after 0.001 seconds.
+􁁛  Test run with 3 tests in 1 suite passed after 0.001 seconds.
+== swift test: Packages/bm-Catalog ==
+Building for debugging...
+[1 / 5] Core
+Build complete! (0,21 Sek.)
+Test Suite 'All tests' started at 2026-09-17 19:28:03.078.
+Test Suite 'All tests' passed at 2026-09-17 19:28:03.079.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+􀟈  Test run started.
+􀄵  Testing Library Version: 2084
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite "CatalogStore" started.
+􀟈  Test "A sort order knows what to call itself" started.
+􀟈  Test "Sorting by title and by author" started.
+􀟈  Test "Loading returns the shelf it was built with" started.
+􀟈  Test "Settings start sorted by title" started.
+􁁛  Test "Loading returns the shelf it was built with" passed after 0.001 seconds.
+􁁛  Test "A sort order knows what to call itself" passed after 0.001 seconds.
+􁁛  Test "Settings start sorted by title" passed after 0.001 seconds.
+􀟈  Test case passing 2 arguments order → .author, expected → ["Zone One", "Dune", "Kindred"] to "Sorting by title and by author" started.
+􀟈  Test case passing 2 arguments order → .title, expected → ["Dune", "Kindred", "Zone One"] to "Sorting by title and by author" started.
+􁁛  Test "Sorting by title and by author" with 2 test cases passed after 0.001 seconds.
+􁁛  Suite "CatalogStore" passed after 0.001 seconds.
+􁁛  Test run with 4 tests in 1 suite passed after 0.001 seconds.
+== xcodebuild test (iPhone 18 Pro Max): Packages/fm-BookList ==
+2026-09-17 19:28:05.730 xcodebuild[74395:16681286] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
+2026-09-17 19:28:12.456 xcodebuild[74395:16681286] [MT] IDETestOperationsObserverDebug: 5.839 elapsed -- Testing started completed.
+2026-09-17 19:28:12.456 xcodebuild[74395:16681286] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-09-17 19:28:12.456 xcodebuild[74395:16681286] [MT] IDETestOperationsObserverDebug: 5.839 sec, +5.839 sec -- end
+Testing started
+== skip (no Tests/): Packages/fm-Settings ==
+== swift test: Packages/lib-Core ==
+Building for debugging...
+Build complete! (0,20 Sek.)
+Test Suite 'All tests' started at 2026-09-17 19:28:16.510.
+Test Suite 'All tests' passed at 2026-09-17 19:28:16.511.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+􀟈  Test run started.
+􀄵  Testing Library Version: 2084
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite "Core" started.
+􀟈  Test "A publication date renders as its year" started.
+􀟈  Test "A book id keeps the value it was made from" started.
+􁁛  Test "A book id keeps the value it was made from" passed after 0.001 seconds.
+􁁛  Test "A publication date renders as its year" passed after 0.001 seconds.
+􁁛  Suite "Core" passed after 0.001 seconds.
+􁁛  Test run with 2 tests in 1 suite passed after 0.001 seconds.
+== skip (no Tests/): Packages/lib-DesignSystem ==
+swiftlint lint --strict
+Linting Swift files in current working directory
+Linting 'ShelfApp.swift' (1/31)
+Linting 'AnalyticsTests.swift' (2/31)
+Linting 'Analytics.swift' (3/31)
+Linting 'InMemoryAnalyticsSink.swift' (4/31)
+Linting 'AnalyticsEvent.swift' (5/31)
+Linting 'ArchitectureConfig.swift' (6/31)
+Linting 'ModuleRegistry.swift' (7/31)
+Linting 'ArchitectureTests.swift' (8/31)
+Linting 'Rules.swift' (9/31)
+Linting 'UIFrameworks.swift' (10/31)
+Linting 'BookID.swift' (11/31)
+Linting 'PublicationYear.swift' (13/31)
+Linting 'CoreTests.swift' (12/31)
+Linting 'Packages/ArchitectureTests/Package.swift' (14/31)
+Linting 'Packages/bm-Analytics/Package.swift' (15/31)
+Linting 'Packages/lib-Core/Package.swift' (16/31)
+Linting 'Spacing.swift' (17/31)
+Linting 'CardStyle.swift' (18/31)
+Linting 'BookListViewModelTests.swift' (19/31)
+Linting 'BookListView.swift' (20/31)
+Linting 'BookListViewModel.swift' (21/31)
+Linting 'Packages/lib-DesignSystem/Package.swift' (22/31)
+Linting 'SettingsView.swift' (23/31)
+Linting 'Packages/fm-BookList/Package.swift' (24/31)
+Linting 'CatalogStoreTests.swift' (25/31)
+Linting 'Book.swift' (26/31)
+Linting 'BookSortOrder.swift' (27/31)
+Linting 'Packages/fm-Settings/Package.swift' (28/31)
+Linting 'CatalogStore.swift' (29/31)
+Linting 'Packages/bm-Catalog/Package.swift' (30/31)
+Linting 'CatalogSettings.swift' (31/31)
+Done linting! Found 0 violations, 0 serious in 31 files.
+make verify exit: 0

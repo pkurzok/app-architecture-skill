@@ -1,0 +1,1 @@
+ARCH: Packages/bm-Catalog/Package.swift declares ../lib-DesignSystem — business module depends on UI library DesignSystem

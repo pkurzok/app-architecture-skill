@@ -1,0 +1,125 @@
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/App/Sources/ShelfApp.swift <run>/App/Sources/ShelfApp.swift
+--- <fixture>/App/Sources/ShelfApp.swift	2026-09-17 18:58:33
++++ <run>/App/Sources/ShelfApp.swift	2026-09-18 08:30:08
+@@ -1,6 +1,7 @@
+ import Analytics
+ import BookList
+ import Catalog
++import DesignSystem
+ import SwiftUI
+ 
+ /// The composition root. It is the only place that may import every layer, so it is where the
+@@ -9,20 +10,26 @@
+ struct ShelfApp: App {
+     @State private var settings: CatalogSettings
+     @State private var bookList: BookListViewModel
++    private let analytics: Analytics
+ 
+     init() {
+         let settings = CatalogSettings()
++        let analytics = Analytics(sinks: [InMemoryAnalyticsSink()])
++        self.analytics = analytics
+         _settings = State(initialValue: settings)
+         _bookList = State(initialValue: BookListViewModel(
+             store: CatalogStore(),
+             settings: settings,
+-            analytics: Analytics(sinks: [InMemoryAnalyticsSink()])
++            analytics: analytics
+         ))
+     }
+ 
+     var body: some Scene {
+         WindowGroup {
+             BookListView(viewModel: bookList)
++                .environment(\.screenTracker, ScreenTracker(id: "analytics") { screen in
++                    analytics.track(event: "screen_view", parameters: ["screen": screen])
++                })
+         }
+     }
+ }
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/Packages/fm-BookList/Sources/BookList/BookListView.swift <run>/Packages/fm-BookList/Sources/BookList/BookListView.swift
+--- <fixture>/Packages/fm-BookList/Sources/BookList/BookListView.swift	2026-09-17 18:58:33
++++ <run>/Packages/fm-BookList/Sources/BookList/BookListView.swift	2026-09-18 08:30:13
+@@ -19,6 +19,7 @@
+             .listStyle(.plain)
+             .navigationTitle("Shelf")
+         }
++        .trackScreen("BookList")
+         .task {
+             await viewModel.load()
+         }
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/Packages/fm-Settings/Sources/Settings/SettingsView.swift <run>/Packages/fm-Settings/Sources/Settings/SettingsView.swift
+--- <fixture>/Packages/fm-Settings/Sources/Settings/SettingsView.swift	2026-09-17 18:58:33
++++ <run>/Packages/fm-Settings/Sources/Settings/SettingsView.swift	2026-09-18 08:30:14
+@@ -23,5 +23,6 @@
+             .padding(.top, Spacing.small)
+             .navigationTitle("Settings")
+         }
++        .trackScreen("Settings")
+     }
+ }
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/Packages/lib-DesignSystem/Sources/DesignSystem/ScreenTracking.swift <run>/Packages/lib-DesignSystem/Sources/DesignSystem/ScreenTracking.swift
+--- <fixture>/Packages/lib-DesignSystem/Sources/DesignSystem/ScreenTracking.swift	1970-01-01 01:00:00
++++ <run>/Packages/lib-DesignSystem/Sources/DesignSystem/ScreenTracking.swift	2026-09-18 08:30:01
+@@ -0,0 +1,50 @@
++import SwiftUI
++
++/// Reports that a screen appeared. Injected by the app shell; the design system knows nothing
++/// about analytics, and the analytics module knows nothing about SwiftUI.
++public struct ScreenTracker: Equatable, Sendable {
++    private let id: String
++    // `@MainActor @Sendable` so the type is `Sendable` and `disabled` can be a `static let` under
++    // Swift 6. The closure only ever runs while a view is on screen, which is main-actor work.
++    private let report: @MainActor @Sendable (String) -> Void
++
++    public init(id: String, report: @escaping @MainActor @Sendable (String) -> Void) {
++        self.id = id
++        self.report = report
++    }
++
++    @MainActor
++    public func callAsFunction(_ screen: String) {
++        report(screen)
++    }
++
++    public static let disabled = ScreenTracker(id: "disabled") { _ in }
++
++    public static func == (lhs: ScreenTracker, rhs: ScreenTracker) -> Bool {
++        lhs.id == rhs.id
++    }
++}
++
++public extension EnvironmentValues {
++    // The default is a `static let`, not a fresh expression: `@Entry` re-evaluates its default on
++    // every read that falls back to it, so a default that allocates would invalidate readers on
++    // every unrelated environment write.
++    @Entry var screenTracker: ScreenTracker = .disabled
++}
++
++private struct TrackScreen: ViewModifier {
++    @Environment(\.screenTracker) private var screenTracker
++
++    let name: String
++
++    func body(content: Content) -> some View {
++        content.onAppear { screenTracker(name) }
++    }
++}
++
++public extension View {
++    /// Reports this screen's name to analytics when it appears. The whole cost of a new screen.
++    func trackScreen(_ name: String) -> some View {
++        modifier(TrackScreen(name: name))
++    }
++}
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/project.yml <run>/project.yml
+--- <fixture>/project.yml	2026-09-17 18:58:45
++++ <run>/project.yml	2026-09-18 08:30:19
+@@ -33,6 +33,7 @@
+       - package: Settings
+       - package: Analytics
+       - package: Catalog
++      - package: DesignSystem
+ # A shared scheme for the app target, so a clean `xcodegen generate` always yields a "Shelf"
+ # scheme. Without this, xcodebuild only finds the transient auto-created scheme in xcuserdata,
+ # which a fresh generate wipes.

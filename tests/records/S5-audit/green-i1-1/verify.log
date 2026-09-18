@@ -1,0 +1,72 @@
+bash scripts/test-all.sh
+== swift test: Packages/bm-Analytics ==
+Building for debugging...
+[1 / 5]
+Build complete! (0,31 Sek.)
+Test Suite 'All tests' started at 2026-09-18 09:47:35.508.
+Test Suite 'All tests' passed at 2026-09-18 09:47:35.509.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+􀟈  Test run started.
+􀄵  Testing Library Version: 2084
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite "Analytics" started.
+􀟈  Test "An event reaches every sink" started.
+􀟈  Test "Tracking without a sink is harmless" started.
+􁁛  Test "Tracking without a sink is harmless" passed after 0.001 seconds.
+􁁛  Test "An event reaches every sink" passed after 0.001 seconds.
+􁁛  Suite "Analytics" passed after 0.001 seconds.
+􁁛  Test run with 2 tests in 1 suite passed after 0.001 seconds.
+== skip (no Tests/): Packages/bm-Catalog ==
+== xcodebuild test (iPhone 18 Pro Max): Packages/fm-BookList ==
+2026-09-18 09:47:37.336 xcodebuild[66741:21068775] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
+2026-09-18 09:47:46.131 xcodebuild[66741:21068775] [MT] IDETestOperationsObserverDebug: 8.137 elapsed -- Testing started completed.
+2026-09-18 09:47:46.131 xcodebuild[66741:21068775] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-09-18 09:47:46.131 xcodebuild[66741:21068775] [MT] IDETestOperationsObserverDebug: 8.137 sec, +8.137 sec -- end
+Testing started
+== skip (no Tests/): Packages/fm-Settings ==
+== xcodebuild test (iPhone 18 Pro Max): Packages/lib-Core ==
+2026-09-18 09:47:50.805 xcodebuild[67072:21072092] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
+2026-09-18 09:47:59.477 xcodebuild[67072:21072092] [MT] IDETestOperationsObserverDebug: 8.213 elapsed -- Testing started completed.
+2026-09-18 09:47:59.477 xcodebuild[67072:21072092] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-09-18 09:47:59.477 xcodebuild[67072:21072092] [MT] IDETestOperationsObserverDebug: 8.213 sec, +8.213 sec -- end
+Testing started
+== skip (no Tests/): Packages/lib-DesignSystem ==
+== xcodebuild test (iPhone 18 Pro Max): Packages/lib-Formatting ==
+2026-09-18 09:48:04.081 xcodebuild[67346:21075075] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
+2026-09-18 09:48:13.939 xcodebuild[67346:21075075] [MT] IDETestOperationsObserverDebug: 9.400 elapsed -- Testing started completed.
+2026-09-18 09:48:13.939 xcodebuild[67346:21075075] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-09-18 09:48:13.939 xcodebuild[67346:21075075] [MT] IDETestOperationsObserverDebug: 9.400 sec, +9.400 sec -- end
+Testing started
+swiftlint lint --strict
+Linting Swift files in current working directory
+Linting 'CoreTests.swift' (1/29)
+Linting 'PublicationYear.swift' (3/29)
+Linting 'AnalyticsTests.swift' (4/29)
+Linting 'BookID.swift' (2/29)
+Linting 'LegacyApp.swift' (6/29)
+Linting 'FormattingTests.swift' (8/29)
+Linting 'Analytics.swift' (5/29)
+Linting 'AnalyticsEvent.swift' (7/29)
+Linting 'TrackedScreen.swift' (9/29)
+Linting 'Spacing.swift' (10/29)
+Linting 'ShelfCount.swift' (11/29)
+Linting 'CardStyle.swift' (12/29)
+Linting 'BookListViewModelTests.swift' (13/29)
+Linting 'InMemoryAnalyticsSink.swift' (14/29)
+Linting 'BookListView.swift' (15/29)
+Linting 'BookListViewModel.swift' (16/29)
+Linting 'SettingsView.swift' (17/29)
+Linting 'CoverTint.swift' (18/29)
+Linting 'Book.swift' (19/29)
+Linting 'BookSortOrder.swift' (20/29)
+Linting 'Packages/bm-Analytics/Package.swift' (23/29)
+Linting 'Packages/bm-Catalog/Package.swift' (24/29)
+Linting 'CatalogStore.swift' (21/29)
+Linting 'CatalogSettings.swift' (22/29)
+Linting 'Packages/fm-BookList/Package.swift' (25/29)
+Linting 'Packages/lib-DesignSystem/Package.swift' (26/29)
+Linting 'Packages/lib-Core/Package.swift' (27/29)
+Linting 'Packages/lib-Formatting/Package.swift' (28/29)
+Linting 'Packages/fm-Settings/Package.swift' (29/29)
+Done linting! Found 0 violations, 0 serious in 29 files.
+make verify exit: 0

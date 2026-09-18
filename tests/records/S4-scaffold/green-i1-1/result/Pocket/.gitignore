@@ -1,0 +1,7 @@
+# Copy to .gitignore in the repository root.
+# The Xcode project is generated from project.yml, so it is never committed.
+*.xcodeproj
+.build/
+.swiftpm/
+DerivedData/
+.DS_Store

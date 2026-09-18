@@ -1,0 +1,24 @@
+# The run started from an empty directory — this is the tree it created, not a diff.
+
+./Pocket/.gitignore
+./Pocket/.swiftlint.yml
+./Pocket/AGENTS.md
+./Pocket/App/Sources/PocketApp.swift
+./Pocket/Makefile
+./Pocket/Packages/ArchitectureTests/Package.swift
+./Pocket/Packages/ArchitectureTests/Tests/ArchitectureTests/ArchitectureConfig.swift
+./Pocket/Packages/ArchitectureTests/Tests/ArchitectureTests/ArchitectureTests.swift
+./Pocket/Packages/ArchitectureTests/Tests/ArchitectureTests/ModuleRegistry.swift
+./Pocket/Packages/ArchitectureTests/Tests/ArchitectureTests/Rules.swift
+./Pocket/Packages/ArchitectureTests/Tests/ArchitectureTests/UIFrameworks.swift
+./Pocket/Packages/bm-Notes/Package.swift
+./Pocket/Packages/bm-Notes/Sources/Notes/InMemoryNotesStore.swift
+./Pocket/Packages/bm-Notes/Sources/Notes/Note.swift
+./Pocket/Packages/bm-Notes/Sources/Notes/NotesStore.swift
+./Pocket/Packages/bm-Notes/Tests/NotesTests/InMemoryNotesStoreTests.swift
+./Pocket/Packages/fm-NotesList/Package.swift
+./Pocket/Packages/fm-NotesList/Sources/NotesList/NotesListView.swift
+./Pocket/Packages/fm-NotesList/Sources/NotesList/NotesListViewModel.swift
+./Pocket/Packages/fm-NotesList/Tests/NotesListTests/NotesListViewModelTests.swift
+./Pocket/project.yml
+./Pocket/scripts/test-all.sh

@@ -1,0 +1,1 @@
+ARCH: Catalog depends on UI library Core (Packages/bm-Catalog/Sources/Catalog/Catalog.swift:1); Core imports UIKit in Packages/lib-Core/Sources/Core/Core.swift:1

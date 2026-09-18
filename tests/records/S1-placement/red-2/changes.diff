@@ -1,0 +1,136 @@
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/App/Sources/ShelfApp.swift <run>/App/Sources/ShelfApp.swift
+--- <fixture>/App/Sources/ShelfApp.swift	2026-09-17 18:58:33
++++ <run>/App/Sources/ShelfApp.swift	2026-09-17 19:24:34
+@@ -9,20 +9,23 @@
+ struct ShelfApp: App {
+     @State private var settings: CatalogSettings
+     @State private var bookList: BookListViewModel
++    private let analytics: Analytics
+ 
+     init() {
+         let settings = CatalogSettings()
++        let analytics = Analytics(sinks: [InMemoryAnalyticsSink()])
+         _settings = State(initialValue: settings)
+         _bookList = State(initialValue: BookListViewModel(
+             store: CatalogStore(),
+             settings: settings,
+-            analytics: Analytics(sinks: [InMemoryAnalyticsSink()])
++            analytics: analytics
+         ))
++        self.analytics = analytics
+     }
+ 
+     var body: some Scene {
+         WindowGroup {
+-            BookListView(viewModel: bookList)
++            BookListView(viewModel: bookList, analytics: analytics)
+         }
+     }
+ }
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/Packages/bm-Analytics/Sources/Analytics/Analytics.swift <run>/Packages/bm-Analytics/Sources/Analytics/Analytics.swift
+--- <fixture>/Packages/bm-Analytics/Sources/Analytics/Analytics.swift	2026-09-17 18:57:22
++++ <run>/Packages/bm-Analytics/Sources/Analytics/Analytics.swift	2026-09-17 19:24:03
+@@ -15,4 +15,10 @@
+             sink.track(event)
+         }
+     }
++
++    /// Every screen reports itself through this one call, so a screen's tracking is a single line
++    /// wherever it appears — see `View.onAppear` at each screen's call site.
++    public func trackScreenAppeared(_ screenName: String) {
++        track(event: "screen_view", parameters: ["screen_name": screenName])
++    }
+ }
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/Packages/bm-Analytics/Tests/AnalyticsTests/AnalyticsTests.swift <run>/Packages/bm-Analytics/Tests/AnalyticsTests/AnalyticsTests.swift
+--- <fixture>/Packages/bm-Analytics/Tests/AnalyticsTests/AnalyticsTests.swift	2026-09-17 18:57:22
++++ <run>/Packages/bm-Analytics/Tests/AnalyticsTests/AnalyticsTests.swift	2026-09-17 19:24:10
+@@ -21,4 +21,15 @@
+     func trackingWithoutSinksIsHarmless() {
+         Analytics().track(event: "book_list_loaded")
+     }
++
++    @Test("A screen reports its own name as a screen_view event")
++    func screenAppearedTracksItsName() {
++        let sink = InMemoryAnalyticsSink()
++        let analytics = Analytics(sinks: [sink])
++
++        analytics.trackScreenAppeared("BookList")
++
++        let expected = AnalyticsEvent(name: "screen_view", parameters: ["screen_name": "BookList"])
++        #expect(sink.events == [expected])
++    }
+ }
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/Packages/fm-BookList/Sources/BookList/BookListView.swift <run>/Packages/fm-BookList/Sources/BookList/BookListView.swift
+--- <fixture>/Packages/fm-BookList/Sources/BookList/BookListView.swift	2026-09-17 18:58:33
++++ <run>/Packages/fm-BookList/Sources/BookList/BookListView.swift	2026-09-17 19:24:16
+@@ -1,3 +1,4 @@
++import Analytics
+ import Catalog
+ import Core
+ import DesignSystem
+@@ -6,9 +7,11 @@
+ /// The shelf.
+ public struct BookListView: View {
+     private let viewModel: BookListViewModel
++    private let analytics: Analytics
+ 
+-    public init(viewModel: BookListViewModel) {
++    public init(viewModel: BookListViewModel, analytics: Analytics) {
+         self.viewModel = viewModel
++        self.analytics = analytics
+     }
+ 
+     public var body: some View {
+@@ -22,6 +25,7 @@
+         .task {
+             await viewModel.load()
+         }
++        .onAppear { analytics.trackScreenAppeared("BookList") }
+     }
+ }
+ 
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/Packages/fm-Settings/Package.swift <run>/Packages/fm-Settings/Package.swift
+--- <fixture>/Packages/fm-Settings/Package.swift	2026-09-17 18:58:33
++++ <run>/Packages/fm-Settings/Package.swift	2026-09-17 19:24:21
+@@ -6,11 +6,13 @@
+     platforms: [.iOS(.v18)],
+     products: [.library(name: "Settings", targets: ["Settings"])],
+     dependencies: [
++        .package(path: "../bm-Analytics"),
+         .package(path: "../bm-Catalog"),
+         .package(path: "../lib-DesignSystem"),
+     ],
+     targets: [
+         .target(name: "Settings", dependencies: [
++            .product(name: "Analytics", package: "bm-Analytics"),
+             .product(name: "Catalog", package: "bm-Catalog"),
+             .product(name: "DesignSystem", package: "lib-DesignSystem"),
+         ]),
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/Packages/fm-Settings/Sources/Settings/SettingsView.swift <run>/Packages/fm-Settings/Sources/Settings/SettingsView.swift
+--- <fixture>/Packages/fm-Settings/Sources/Settings/SettingsView.swift	2026-09-17 18:58:33
++++ <run>/Packages/fm-Settings/Sources/Settings/SettingsView.swift	2026-09-17 19:24:28
+@@ -1,3 +1,4 @@
++import Analytics
+ import Catalog
+ import DesignSystem
+ import SwiftUI
+@@ -5,9 +6,11 @@
+ /// The reader's preferences.
+ public struct SettingsView: View {
+     private let settings: CatalogSettings
++    private let analytics: Analytics
+ 
+-    public init(settings: CatalogSettings) {
++    public init(settings: CatalogSettings, analytics: Analytics) {
+         self.settings = settings
++        self.analytics = analytics
+     }
+ 
+     public var body: some View {
+@@ -23,5 +26,6 @@
+             .padding(.top, Spacing.small)
+             .navigationTitle("Settings")
+         }
++        .onAppear { analytics.trackScreenAppeared("Settings") }
+     }
+ }

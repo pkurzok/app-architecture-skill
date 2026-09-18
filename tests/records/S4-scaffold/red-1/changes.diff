@@ -1,0 +1,17 @@
+# The run started from an empty directory — this is the tree it created, not a diff.
+
+./Pocket/.gitignore
+./Pocket/App/Assets.xcassets/AccentColor.colorset/Contents.json
+./Pocket/App/Assets.xcassets/AppIcon.appiconset/Contents.json
+./Pocket/App/Assets.xcassets/Contents.json
+./Pocket/App/PocketApp.swift
+./Pocket/Generated/Info.plist
+./Pocket/Packages/NotesKit/Package.swift
+./Pocket/Packages/NotesKit/Sources/NotesKit/Note.swift
+./Pocket/Packages/NotesKit/Sources/NotesKit/NotesPersisting.swift
+./Pocket/Packages/NotesKit/Sources/NotesKit/NotesStore.swift
+./Pocket/Packages/NotesKit/Tests/NotesKitTests/NotesStoreTests.swift
+./Pocket/Packages/NotesListFeature/Package.swift
+./Pocket/Packages/NotesListFeature/Sources/NotesListFeature/NotesListView.swift
+./Pocket/Packages/NotesListFeature/Tests/NotesListFeatureTests/NotesListViewTests.swift
+./Pocket/project.yml

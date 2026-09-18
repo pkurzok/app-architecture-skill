@@ -1,0 +1,1 @@
+ARCH: Packages/bm-Catalog has no Sources/Catalog directory — module name is the directory name minus its prefix

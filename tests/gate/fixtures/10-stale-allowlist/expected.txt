@@ -1,0 +1,1 @@
+ARCH: ArchitectureConfig.uiBoundaryAllowlist lists Packages/bm-Catalog/Sources/Catalog/Thumbnail.swift, but that file has no ui-boundary marker

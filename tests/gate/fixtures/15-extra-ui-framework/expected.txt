@@ -1,0 +1,1 @@
+ARCH: Catalog imports MarkdownUI — UI framework in business module (Packages/bm-Catalog/Sources/Catalog/Catalog.swift:1)

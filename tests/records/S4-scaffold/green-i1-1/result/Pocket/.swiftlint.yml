@@ -1,0 +1,30 @@
+# Copy to .swiftlint.yml in the repository root.
+# `make lint` runs `swiftlint --strict`, so any remaining warning fails the gate.
+
+included:
+  - App/Sources
+  - Packages
+
+excluded:
+  - "**/.build"
+  - "**/.swiftpm"
+  - "*.xcodeproj"
+  - DerivedData
+
+disabled_rules:
+  - trailing_comma   # trailing commas in Package.swift manifests are idiomatic
+  - todo             # documented TODOs are intentional placeholders
+  - force_try        # allowed in test bootstrap (e.g. the ArchitectureTests registry)
+
+opt_in_rules:
+  - empty_count
+  - explicit_init
+  - first_where
+  - toggle_bool
+
+line_length:
+  warning: 120
+  ignores_comments: true
+
+identifier_name:
+  min_length: 2

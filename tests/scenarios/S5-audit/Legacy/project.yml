@@ -1,0 +1,42 @@
+name: Legacy
+options:
+  bundleIdPrefix: com.example
+  deploymentTarget: { iOS: "18.0" }
+  createIntermediateGroups: true
+packages:
+  Core:         { path: Packages/lib-Core }
+  DesignSystem: { path: Packages/lib-DesignSystem }
+  Formatting:   { path: Packages/lib-Formatting }
+  Analytics:    { path: Packages/bm-Analytics }
+  Catalog:      { path: Packages/bm-Catalog }
+  BookList:     { path: Packages/fm-BookList }
+  Settings:     { path: Packages/fm-Settings }
+targets:
+  Legacy:
+    type: application
+    platform: iOS
+    sources: [App/Sources]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.Legacy
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+    dependencies:
+      - package: BookList
+      - package: Analytics
+      - package: Catalog
+schemes:
+  Legacy:
+    build:
+      targets:
+        Legacy: all
+    run:
+      config: Debug
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release

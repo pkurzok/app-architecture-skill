@@ -1,0 +1,1 @@
+ARCH: Core has no @Test under Tests/CoreTests

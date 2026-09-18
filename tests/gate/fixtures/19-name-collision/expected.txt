@@ -1,0 +1,1 @@
+ARCH: module name App is used by more than one package or equals the app name

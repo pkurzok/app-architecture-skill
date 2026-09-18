@@ -1,0 +1,89 @@
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/Packages/fm-BookList/Sources/BookList/BookListView.swift <run>/Packages/fm-BookList/Sources/BookList/BookListView.swift
+--- <fixture>/Packages/fm-BookList/Sources/BookList/BookListView.swift	2026-09-17 18:58:33
++++ <run>/Packages/fm-BookList/Sources/BookList/BookListView.swift	2026-09-17 19:08:11
+@@ -2,6 +2,7 @@
+ import Core
+ import DesignSystem
+ import SwiftUI
++import UIKit
+ 
+ /// The shelf.
+ public struct BookListView: View {
+@@ -29,12 +30,17 @@
+     let book: Book
+ 
+     var body: some View {
+-        VStack(alignment: .leading, spacing: Spacing.small) {
+-            Text(book.title)
+-                .font(.headline)
+-            Text("\(book.author) · \(PublicationYear.label(for: book.published))")
+-                .font(.subheadline)
+-                .foregroundStyle(.secondary)
++        HStack(spacing: Spacing.medium) {
++            Image(uiImage: CoverImageCache.shared.thumbnail(
++                for: book.id, size: CGSize(width: 32, height: 44)))
++                .clipShape(.rect(cornerRadius: Spacing.small))
++            VStack(alignment: .leading, spacing: Spacing.small) {
++                Text(book.title)
++                    .font(.headline)
++                Text("\(book.author) · \(PublicationYear.label(for: book.published))")
++                    .font(.subheadline)
++                    .foregroundStyle(.secondary)
++            }
+         }
+         .frame(maxWidth: .infinity, alignment: .leading)
+         .cardStyle()
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/Packages/lib-DesignSystem/Package.swift <run>/Packages/lib-DesignSystem/Package.swift
+--- <fixture>/Packages/lib-DesignSystem/Package.swift	2026-09-17 18:57:22
++++ <run>/Packages/lib-DesignSystem/Package.swift	2026-09-17 20:01:02
+@@ -5,7 +5,12 @@
+     name: "lib-DesignSystem",
+     platforms: [.iOS(.v18)],
+     products: [.library(name: "DesignSystem", targets: ["DesignSystem"])],
++    dependencies: [
++        .package(path: "../lib-Core"),
++    ],
+     targets: [
+-        .target(name: "DesignSystem"),
++        .target(name: "DesignSystem", dependencies: [
++            .product(name: "Core", package: "lib-Core"),
++        ]),
+     ]
+ )
+diff -ruN -x .build -x .swiftpm -x *.xcodeproj -x DerivedData <fixture>/Packages/lib-DesignSystem/Sources/DesignSystem/CoverImage.swift <run>/Packages/lib-DesignSystem/Sources/DesignSystem/CoverImage.swift
+--- <fixture>/Packages/lib-DesignSystem/Sources/DesignSystem/CoverImage.swift	1970-01-01 01:00:00
++++ <run>/Packages/lib-DesignSystem/Sources/DesignSystem/CoverImage.swift	2026-09-17 20:00:56
+@@ -0,0 +1,33 @@
++#if canImport(UIKit)
++import Core
++import UIKit
++
++/// Decoded cover thumbnails, kept so a scrolling shelf never decodes the same cover twice.
++///
++/// Lives in DesignSystem, not Catalog: rendering a bitmap is UI work, and Catalog is a business
++/// module that stays free of UI frameworks. DesignSystem already renders (see `CardStyle`), so a
++/// thumbnail cache belongs here instead of behind a `// ui-boundary:` exception.
++@MainActor
++public final class CoverImageCache {
++    public static let shared = CoverImageCache()
++
++    private let cache = NSCache<NSString, UIImage>()
++
++    private init() {}
++
++    public func thumbnail(for id: BookID, size: CGSize) -> UIImage {
++        if let cached = cache.object(forKey: id.rawValue as NSString) {
++            return cached
++        }
++        let renderer = UIGraphicsImageRenderer(size: size)
++        let image = renderer.image { context in
++            UIColor.secondarySystemFill.setFill()
++            context.fill(CGRect(origin: .zero, size: size))
++            UIColor.tertiaryLabel.setFill()
++            context.fill(CGRect(x: 0, y: size.height - 4, width: size.width, height: 4))
++        }
++        cache.setObject(image, forKey: id.rawValue as NSString)
++        return image
++    }
++}
++#endif
